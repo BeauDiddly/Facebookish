@@ -7,3 +7,8 @@ Developers:
 - Heston Vaughan / hestonCV / Developer, Database Manager
 - Caleb Germany / ca1b / Developer
 - Hunter Stanard / sanswee / Developer, Scrum Manager
+
+Technologies:
+- Flask
+- SQL Alchemy
+- Python
