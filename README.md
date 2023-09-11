@@ -1,6 +1,5 @@
 # Facebookish
-MSST students best copy of Facebook for Intro to Software Engineering
-Using Python
+This product will be a stand-alone, self-contained social media platform that aims to provide features similar to Facebook, allowing users to connect and share content with friends online. The system structure will involve the front-end served to the user, managing user interactions, and interfacing with the database in the back end to store user data, posts, and other essential information. 
 
 Developers:
 - Beau Schureck / BeauDiddly / Developer, Team Lead
