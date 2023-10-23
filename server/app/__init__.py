@@ -16,6 +16,9 @@ def create_app(test_config=None):
 
     from .models import User
 
+    with app.app_context():
+        db.create_all()
+
     # ensure the instance folder exists
     # try:
     #     os.makedirs(app.instance_path)
