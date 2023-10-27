@@ -2,3 +2,5 @@
 /server/instance/
 /server/app/__pychache__/
 /.vscode/
+
+*.pyc

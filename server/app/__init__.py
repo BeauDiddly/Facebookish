@@ -3,9 +3,8 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-from .login import setup_login
-
 db = SQLAlchemy()
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -13,6 +12,8 @@ def create_app(test_config=None):
 
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    app.secret_key = 'f87d243efeeedc392349ec7b8e35f80bde77bdeac7043a04390884759490c3ad'
 
     db.init_app(app)
 
@@ -22,16 +23,16 @@ def create_app(test_config=None):
         db.create_all()
 
     # ensure the instance folder exists
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-    
-    setup_login(app)
+    from . import auth, index
+
+    # do this for each category of page
+    # we'll probably need this (index, auth) and post, feed, user, friends
+    app.register_blueprint(index.bp)
+    app.register_blueprint(auth.bp)
 
     return app
