@@ -3,6 +3,8 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+from .login import setup_login
+
 db = SQLAlchemy()
 
 def create_app(test_config=None):
@@ -29,5 +31,7 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+    
+    setup_login(app)
 
     return app

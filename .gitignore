@@ -1,2 +1,5 @@
 /.venv/
 /server/instance/
+/server/app/__pychache__
+/.vscode/
+
