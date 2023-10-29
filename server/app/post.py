@@ -11,8 +11,8 @@ def create():
         post = request.form["createpost"]
     return render_template("createpost.html", name="test")
 
-@bp.route("/create", methods=["POST", "GET"])
+@bp.route("/edit", methods=["POST", "GET"])
 def create():
     if request.method == "POST":
-        post = request.form["createpost"]
-    return render_template("createpost.html", name="test")
+        post = request.form["editpost"]
+    return render_template("editpost.html", name="test")
