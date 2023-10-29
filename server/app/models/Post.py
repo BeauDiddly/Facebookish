@@ -5,3 +5,4 @@ class Post(db.Model):
     content = db.Column(db.String(250))
     date_time = db.Column(db.DateTime)
     
+    

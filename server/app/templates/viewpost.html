@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<head>
+    <title>Facebookish Login</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color:red">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}    
+    <p>{{posttext}}</p>
+    <br>
+    <form>
+        <input type="button" id="editpost" name="editpost" value="Edit Post">        
+    </form>
+</body>

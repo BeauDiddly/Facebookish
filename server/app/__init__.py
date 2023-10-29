@@ -28,11 +28,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import auth, index
+    from . import auth, index, post
 
     # do this for each category of page
     # we'll probably need this (index, auth) and post, feed, user, friends
     app.register_blueprint(index.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(post.bp)
 
     return app
