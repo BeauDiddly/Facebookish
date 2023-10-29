@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -17,8 +17,6 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from .models import User
-
     with app.app_context():
         db.create_all()
 
@@ -28,11 +26,19 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import auth, index
+    from . import auth, index, friends
 
-    # do this for each category of page
-    # we'll probably need this (index, auth) and post, feed, user, friends
+    # register blueprints
     app.register_blueprint(index.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(friends.bp)
 
+    # with app.app_context():
+    #     db.create_all()
+    
+    # Home page
+    @app.route('/home')
+    def home():
+        return render_template('home.html')
+    
     return app

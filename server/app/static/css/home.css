@@ -1,0 +1,102 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* nav bar styles START */
+.navbar {
+    display: flex;
+    flex: 1;
+    padding: 0 20px;
+    max-height: 10%;
+    background-color: #67a3ba;
+}
+
+.name {
+    color: white;
+}
+/* nav bar styles END */
+
+
+/* main content styles START */
+.content {
+    display: flex;
+    flex: 1;
+    background-color: blue;
+}
+
+.left {
+    flex: 1;
+    background-color: white;
+}
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: center;
+    flex: 1;
+    padding: 0 20px;
+    background-color: rgb(227, 245, 255);
+    max-width: max(11%, 100px);
+
+    border-left: 1px solid rgb(205, 205, 205);
+}
+
+
+/* friend request styles START */
+#request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.request {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 1px 1px 2px black;
+    border-radius: 5%;
+    text-align: left;
+}
+
+/* button styles START */
+.requestButtonContainer {
+    display: flex;
+    gap: 5px;
+}
+
+.accept, .decline {
+    font-size: .7rem;
+    cursor: pointer;
+    border: none;
+}
+
+.accept {
+    background-color: rgb(196, 255, 196);
+}
+
+.accept:hover {
+    background-color: rgb(140, 255, 140);
+}
+
+.decline {
+    background-color: rgb(255, 176, 176);
+}
+
+.decline:hover {
+    background-color: rgb(255, 132, 132);
+}
+/* button styles END */
+/* friend request styles END */
+/* main content styles END */
