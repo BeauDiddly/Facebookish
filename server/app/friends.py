@@ -10,7 +10,7 @@ bp = Blueprint("friends", __name__, url_prefix="/friends")
 from app import db
 
 # Retrieving friend requests
-@bp.route('/requests/<int:user_id>', methods=['GET'])
+@bp.route('/request/<int:user_id>', methods=['GET'])
 def get_friend_requests(user_id):
     # Check if user with matching id exists
     user = User.query.get(user_id)

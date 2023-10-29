@@ -5,7 +5,7 @@ async function rejectFriend(friend_id, user_id, li) {
     If the status comes back successful the list element is removed
     If there are no more requests, it displays 'No friends requests!'
     */
-    response = await fetch('/add_friend', {
+    response = await fetch('/friend/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function addFriend(friend_id, user_id, li) {
     If the status comes back successful the list element is removed
     If there are no more requests, it displays 'No friends requests!'
     */
-    response = await fetch('/add_friend', {
+    response = await fetch('/friends/add', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -107,7 +107,7 @@ async function fetchRequests() {
     // Place holder user_id. -- user1
     user_id = 1
     try {
-      const response = await fetch(`http://localhost:5000/friend_requests/${user_id}`, {
+      const response = await fetch(`http://localhost:5000/friends/request/${user_id}`, {
         method: 'GET'
       });
 
