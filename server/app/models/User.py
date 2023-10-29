@@ -1,13 +1,13 @@
 from app import db
+from sqlalchemy import String, Integer
+from sqlalchemy.orm import Mapped, mapped_column
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(250))
-    password = db.Column(db.String(250))
-    first_name = db.Column(db.String(250))
-    last_name = db.Column(db.String(250))
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    username: Mapped[str] = mapped_column(String)
+    password: Mapped[str] = mapped_column(String)
+    first_name: Mapped[str] = mapped_column(String)
+    last_name: Mapped[str] = mapped_column(String)
     #posts = db.relationship("Post", backref="author")
     #friends = db.relationship("User")
 
-    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    friends = db.relationship('User', backref=db.backref('added_by', remote_side=[id]), lazy='dynamic')

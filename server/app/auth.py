@@ -16,9 +16,11 @@ def login():
         # track error
         error = None
 
+        # if they didn't input a username or password
         if not username or not password:
             error = "Username and password are required"
 
+        # if the username exists and the password is right
         if not error and password == "password":
             session["username"] = username
             return redirect(url_for("index.index"))
@@ -27,6 +29,30 @@ def login():
             flash(error)
 
     return render_template("login.html", name="test")
+
+@bp.route("/register", methods=["POST", "GET"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+
+        error = None
+
+        if not username or not password or not confirm_password:
+            error = "All fields are required"
+
+        if password != confirm_password:
+            error = "Password confirmation does not match password"
+
+        # check if username exists
+
+        # if not, create the user
+
+        if error:
+            flash(error)
+        
+    return render_template("register.html")
 
 @bp.route("/logout")
 def logout():

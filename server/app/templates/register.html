@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+    <title>Facebookish Register</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color:red">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="post">
+        <label for="username">Username:</label>
+        <input 
+            type="text" 
+            name="username">
+        <br>
+        <label for="password">Password:</label>
+        <input 
+            type="password" 
+            name="password">
+        <br>
+        <label for="confirm_password">Confirm Password:</label>
+        <input 
+            type="password" 
+            name="confirm_password">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
