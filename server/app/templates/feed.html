@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Feed{% endblock %}
+
+{% block content %}
+    {% for post in feed %}
+    <div class="post">
+        <p class="post_content">{{ post.content }}</p>
+        <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
+        {% if session['username'] == post.username %}
+            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% endblock %}

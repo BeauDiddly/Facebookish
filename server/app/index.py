@@ -1,12 +1,9 @@
-from flask import Blueprint, session
+from flask import Blueprint, session, redirect, url_for
 
 # define blueprint
 bp = Blueprint("index", __name__, url_prefix="/")
 
 @bp.route("/")
 def index():
-    if "username" in session:
-        return f"Logged in as {session['username']}"
-    else:
-        return "Not logged in"
+    return redirect(url_for("home"))
         

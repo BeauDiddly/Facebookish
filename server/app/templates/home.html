@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    {% if session.get("username") %}
+    <p>
+        Logged in as {{ session['username'] }} <br>
+        <a href="{{ url_for('auth.logout') }}">Log Out</a>
+    </p>
+    {% else %}
+    <p>
+        Please <a href="{{ url_for('auth.login') }}">Log In</a>
+        or <a href="{{ url_for('auth.register') }}">Register</a>
+    </p>
+    {% endif %}
+{% endblock %}

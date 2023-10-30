@@ -1,6 +1,8 @@
 /.venv/
 /server/instance/
-/server/app/__pychache__/
+**/__pycache__/
 /.vscode/
+/env/
 
 *.pyc
+server/app/post.py
