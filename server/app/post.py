@@ -27,7 +27,7 @@ def create():
 
         if error:
             flash(error)
-            return render_template("createpost.html")
+            return render_template("createpost.html", text="")
 
         db.session.add(Post(user_id=user.id, username=user.username,
                             content=post, date_time=datetime.now()))
@@ -60,7 +60,7 @@ def edit(post_id):
 
         if error:
             flash(error)
-            return render_template("createpost.html")
+            return render_template("createpost.html", text=post.content)
 
         post.content = post_text
         db.session.commit()

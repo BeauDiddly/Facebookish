@@ -5,4 +5,4 @@
 /env/
 
 *.pyc
-server/instance/db.sqlite3
+server/app/post.py

@@ -29,6 +29,14 @@ body, html {
     flex: 1;
 }
 
+.nav_buttons a {
+    color: white;
+}
+
+.nav_buttons a:hover {
+    color: yellow;
+}
+
 .logged_in_as {
     font-size: medium;
 }
