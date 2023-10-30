@@ -9,14 +9,33 @@
 <body>
     <div class="container">
         <div class="navbar">
-            <h1 class="name">Facebook-<span style="font-style: italic;">ish</span></h1>
+            <div class="name">
+                <h1>Facebook-<span style="font-style: italic;">ish</span></h1>
+            </div>
+            {% if session.get("username") %}
+            <div class="nav_buttons">
+                <h2 class="logged_in_as">Logged in as {{ session['username'] }}</h2>
+                <a href="/home">Home</a>
+                <a href="/feed">Feed</a>
+                <a href="/post/create">New Post</a>
+                <a href="/auth/logout">Logout</a>
+            </div>
+            {% else %}
+            <div class="nav_buttons">
+                <h2 class="logged_in_as">Not signed in</h2>
+                <a href="/auth/login">Login</a>
+                <a href="/auth/register">Register</a>
+            </div>
+            {% endif %}
         </div>
         <div class="content">
-            {% for message in get_flashed_messages() %}
-                <div class="flash">{{ message }}</div>
-            {% endfor %}
             <div class="left">
-                {% block content %}{% endblock %}
+                <div class="flash">
+                    {% for message in get_flashed_messages() %}
+                        Error: {{ message }}
+                    {% endfor %}
+                </div>
+                <div class="temp">{% block content %}{% endblock %}</div>
             </div>
             <div class="right">
                 <h4>Friend Requests</h3>

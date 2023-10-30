@@ -4,10 +4,6 @@ body, html {
     height: 100%;
 }
 
-title {
-    font-style: italic;
-}
-
 .container {
     display: flex;
     flex-direction: column;
@@ -21,11 +17,22 @@ title {
     padding: 0 20px;
     max-height: 10%;
     background-color: #67a3ba;
+    color: white;
 }
 
 .name {
-    color: white;
+    flex: 1;
 }
+
+.nav_buttons {
+    display: block;
+    flex: 1;
+}
+
+.logged_in_as {
+    font-size: medium;
+}
+
 /* nav bar styles END */
 
 
@@ -33,12 +40,12 @@ title {
 .content {
     display: flex;
     flex: 1;
-    background-color: blue;
 }
 
 .left {
     flex: 1;
     background-color: white;
+    padding: 0 20px;
 }
 .right {
     display: flex;
@@ -51,6 +58,33 @@ title {
     max-width: max(11%, 100px);
 
     border-left: 1px solid rgb(205, 205, 205);
+}
+.flash {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: center;
+    flex: 1;
+    background-color: rgb(227, 245, 255);
+    max-width: max(11%, 100px);
+    color: red;
+}
+.temp {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    flex: 1;
+}
+
+/* post styles START */
+.post {
+    background-color: rgb(227, 245, 255);
+    margin: 5px;
+    padding: 10px;
+}
+
+.post_content {
+    font-size: large;
 }
 
 

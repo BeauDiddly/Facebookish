@@ -5,8 +5,12 @@
 {% block content %}
     {% for post in feed %}
     <div class="post">
-        <p>{{ post.content }}</p>
-        <p>author = {{ post.username }}, time = {{ post.date_time }}, id = {{ post.id }}</p>
+        <p class="post_content">{{ post.content }}</p>
+        <p class="post_author">author: {{ post.username }}</p>
+        <p class="post_time">time: {{ post.date_time }}</p>
+        {% if session['username'] == post.username %}
+            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        {% endif %}
     </div>
     {% endfor %}
 {% endblock %}
