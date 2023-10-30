@@ -10,6 +10,42 @@ bp = Blueprint("friends", __name__, url_prefix="/friends")
 from app import db
 
 # Retrieving friend requests
+@bp.route('/<int:user_id>', methods=['GET'])
+def get_friends(user_id):
+    # Check if user with matching id exists
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({
+            'status': 'error',
+            'msg': 'User not found'
+        }), 404
+    
+    # If no friend requests for user
+    friends = user.friends.all()
+    print(friends)
+    if not friends:
+        return jsonify({
+            'status': 'success',
+            'data': []
+        }), 200
+    
+    # Extract useful information from each request and database
+    friends_list = []
+    for friend in friends:
+
+        information = {
+            'friend_username': User.query.get(friend.id).username,
+            'friend_user_id': friend.id,
+        }
+        friends_list.append(information)
+
+    return jsonify({
+        'status': 'success',
+        'data': friends_list
+    }), 200
+
+
+# Retrieving friend requests
 @bp.route('/request/<int:user_id>', methods=['GET'])
 def get_friend_requests(user_id):
     # Check if user with matching id exists

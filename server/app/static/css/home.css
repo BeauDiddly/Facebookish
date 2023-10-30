@@ -97,7 +97,7 @@ body, html {
 
 
 /* friend request styles START */
-#request-list {
+.sidebar-list {
     display: flex;
     flex-direction: column;
     gap: 10px;

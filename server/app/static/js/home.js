@@ -142,4 +142,76 @@ async function fetchRequests() {
   }
 
 
+
+  friendList = document.querySelector('#friend-list')
+
+
+  function makeFriendElement(data) {
+    /*
+    Creates the li elements the relevent buttons
+    to be added to the request list
+    
+    It also adds event listeners for the buttons to
+    reject or accept the friend request
+    */
+
+    data.forEach(request => {
+        const li = document.createElement('li');
+        li.classList.add('request')
+
+        // Create element to hold username
+        const usernameElement = document.createElement('span')
+        usernameElement.textContent=request.friend_username;
+        li.appendChild(usernameElement)
+
+        friendList.appendChild(li);
+    });
+}
+
+  async function fetchFriends() {
+
+    /*
+    Uses fetch to get all friend request for a user and 
+    displays them on the homepage
+    */
+    user_id = -1
+
+    try {
+        response = await fetch(`http://localhost:5000/auth/get_user_id`, {
+        method: 'GET'
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        user_id = data.id
+    }
+
+    } catch (error) {
+    console.error('Error:', error);
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5000/friends/${user_id}`, {
+        method: 'GET'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data.data.length != 0){
+            makeFriendElement(data.data)
+            return
+        }  
+      }
+
+      // If no friend requests returned
+      friendList.textContent = 'No friends!'
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+
 fetchRequests();
+fetchFriends();

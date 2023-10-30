@@ -26,6 +26,7 @@ def feed():
         posts = Post.query.filter_by(user_id=id)
         feed.extend(posts)
 
+    feed.sort(key=lambda post: post.date_time)
     feed.reverse()
 
     return render_template("feed.html", feed=feed)
