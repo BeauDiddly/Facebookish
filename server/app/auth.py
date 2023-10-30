@@ -1,6 +1,6 @@
 from app import db
 from flask import (
-    render_template, request, session, redirect, Blueprint, url_for, flash
+    render_template, request, session, redirect, Blueprint, url_for, flash, jsonify
 )
 
 from .models import User
@@ -76,3 +76,21 @@ def register():
 def logout():
     session.pop("username", None)
     return redirect(url_for("home"))
+
+@bp.route("/get_user_id", methods=['GET'])
+def get_user_id():
+    session_username = session.get("username")
+
+    if not session_username:
+        return jsonify({
+            'status': 'error',
+            'msg': 'not signed in'
+        }), 404
+    
+    sender: User = User.query.filter_by(username=session_username).first()
+    print(f"id == {sender.id}")
+    
+    return jsonify({
+        'status': 'success',
+        'id': sender.id
+    }), 200

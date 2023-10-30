@@ -6,7 +6,7 @@
     {% for post in feed %}
     <div class="post">
         <p>{{ post.content }}</p>
-        <p>author = {{ post.username }}, time = {{ post.date_time }}</p>
+        <p>author = {{ post.username }}, time = {{ post.date_time }}, id = {{ post.id }}</p>
     </div>
     {% endfor %}
 {% endblock %}

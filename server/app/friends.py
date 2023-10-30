@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, jsonify, request
+    Blueprint, jsonify, request, session, flash, redirect, url_for
 )
 
 from .models import User, FriendRequest
@@ -86,3 +86,31 @@ def decline_friend():
         'status': 'success',
         'msg': 'Friend request declined'
     }), 201
+
+@bp.route('/send_request', methods=['POST'])
+def send_request():
+    error = None
+
+    target_username = request.form["friend"]
+
+    if not target_username:
+        error = "You know what you did."
+
+    target: User = User.query.filter_by(username=target_username).first()
+    if not target:
+        error = "That user does not exist!"
+
+    sender_username = session.get("username")
+    if not sender_username:
+        error = "You are not signed in!" 
+
+    sender: User = User.query.filter_by(username=sender_username).first()
+    if not sender:
+        error = "Something has gone awfully awry."
+
+    if error:
+        flash(error)
+    else:
+        db.session.add(FriendRequest(from_user_id=sender.id, to_user_id=target.id))
+        db.session.commit()
+    return redirect(url_for("feed.feed"))
