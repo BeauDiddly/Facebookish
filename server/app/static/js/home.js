@@ -103,9 +103,22 @@ async function fetchRequests() {
     Uses fetch to get all friend request for a user and 
     displays them on the homepage
     */
+    user_id = -1
 
-    // Place holder user_id. -- user1
-    user_id = 1
+    try {
+        response = await fetch(`http://localhost:5000/auth/get_user_id`, {
+        method: 'GET'
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        user_id = data.id
+    }
+
+    } catch (error) {
+    console.error('Error:', error);
+    }
+
     try {
       const response = await fetch(`http://localhost:5000/friends/request/${user_id}`, {
         method: 'GET'

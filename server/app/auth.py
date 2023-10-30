@@ -92,5 +92,5 @@ def get_user_id():
     
     return jsonify({
         'status': 'success',
-        'id': sender.id
+        'id': str(sender.id)
     }), 200
