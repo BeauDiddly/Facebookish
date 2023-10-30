@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<head>
-    <title>Facebookish Register</title>
-</head>
-<body>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color:red">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
     <form method="post">
         <label for="username">Username:</label>
         <input 
@@ -28,4 +21,4 @@
         <br>
         <input type="submit" value="Submit">
     </form>
-</body>
+{% endblock %}

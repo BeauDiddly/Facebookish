@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/home.css"/>
+    <title>{% block title %}{% endblock %} - Facebook-ish</title>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h1 class="name">Facebook-<span style="font-style: italic;">ish</span></h1>
+        </div>
+        <div class="content">
+            {% for message in get_flashed_messages() %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+            <div class="left">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="right">
+                <h4>Friend Requests</h3>
+                <ul id="request-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="../static/js/home.js"></script>
+</body>
+</html>

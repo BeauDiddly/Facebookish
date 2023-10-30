@@ -4,6 +4,10 @@ body, html {
     height: 100%;
 }
 
+title {
+    font-style: italic;
+}
+
 .container {
     display: flex;
     flex-direction: column;
