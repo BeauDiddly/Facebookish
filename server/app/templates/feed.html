@@ -3,6 +3,7 @@
 {% block title %}Feed{% endblock %}
 
 {% block content %}
+    {{ pw }}
     {% for post in feed %}
     <div class="post">
         <p class="post_content">{{ post.content }}</p>

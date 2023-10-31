@@ -34,9 +34,6 @@ def create_app(test_config=None):
     app.register_blueprint(friends.bp)
     app.register_blueprint(post.bp)
     app.register_blueprint(feed.bp)
-
-    # with app.app_context():
-    #     db.create_all()
     
     # Home page
     @app.route('/home')

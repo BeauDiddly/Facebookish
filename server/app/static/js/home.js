@@ -5,7 +5,7 @@ async function rejectFriend(friend_id, user_id, li) {
     If the status comes back successful the list element is removed
     If there are no more requests, it displays 'No friends requests!'
     */
-    response = await fetch('/friend/add', {
+    response = await fetch('/friends/decline', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ async function fetchRequests() {
     user_id = -1
 
     try {
-        response = await fetch(`http://localhost:5000/auth/get_user_id`, {
+        response = await fetch(`http://26.170.28.0:5000/auth/get_user_id`, {
         method: 'GET'
     });
 
@@ -120,7 +120,7 @@ async function fetchRequests() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/friends/request/${user_id}`, {
+      const response = await fetch(`http://26.170.28.0:5000/friends/request/${user_id}`, {
         method: 'GET'
       });
 
@@ -177,7 +177,7 @@ async function fetchRequests() {
     user_id = -1
 
     try {
-        response = await fetch(`http://localhost:5000/auth/get_user_id`, {
+        response = await fetch(`http://26.170.28.0:5000/auth/get_user_id`, {
         method: 'GET'
     });
 
@@ -191,7 +191,7 @@ async function fetchRequests() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/friends/${user_id}`, {
+      const response = await fetch(`http://26.170.28.0:5000/friends/${user_id}`, {
         method: 'GET'
       });
 
