@@ -12,8 +12,8 @@ import os
 bp = Blueprint("post", __name__, url_prefix="/post")
 
 IMAGE_UPLOAD_REL_DIRECTORY = "static\\upload\\images"
-IMAGE_UPLOAD_DIRECTORY = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), IMAGE_UPLOAD_REL_DIRECTORY)
+REAL_PATH = os.path.dirname(os.path.realpath(__file__))
+IMAGE_UPLOAD_DIRECTORY = os.path.join(REAL_PATH, IMAGE_UPLOAD_REL_DIRECTORY)
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 
 
@@ -31,9 +31,10 @@ def is_file_allowed(filename: str) -> bool:
 def create():
     """Creates a post as the signed in user.
 
-    A post is successfully made if it has any content, i.e. text or an image.
+    A post is successfully made if it has text. An image are optional.
 
-    :return: the create post page or a redirect to the feed if the post is successfully made
+    :return: the create post page or a redirect to the feed if the post is 
+    successfully made
     """
     if request.method == "POST":
         post_text = request.form["posttext"]
@@ -65,8 +66,13 @@ def create():
                 flash("That file is not valid")
                 return redirect(request.url)
             filename = secure_filename(file.filename)
+
+            # when saving, we need absolute path
             img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
+
+            # when displaying in html, we need relative path
             img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
+            
             file.save(img_abs_path)
             db.session.add(Post(user_id=user.id, username=user.username,
                                 content=post_text, date_time=datetime.now(), 
@@ -81,6 +87,11 @@ def create():
 
 @bp.route("/edit/<int:post_id>", methods=["POST", "GET"])
 def edit(post_id):
+    """Edits a post as the signed in user.
+
+    :return: the edit post page or a redirect to the feed if the post is 
+    successfully edited
+    """
     # get the post
     post: Post = Post.query.get(post_id)
 
@@ -89,33 +100,52 @@ def edit(post_id):
         return redirect(url_for("feed.feed"))
 
     if request.method == "POST":
-        error = None
-
         post_text = request.form["posttext"]
+        post_has_image = "image" in request.files
 
-        if post_text == "" and "image" not in request.files:
+        if post_text == "":
             error = "You cannot post nothing!"
 
         session_username = session.get("username")
 
+        # check that the user is signed in
         if not session_username:
-            error = "You are not signed in!"
+            flash("You are not signed in!")
+            return redirect(request.url)
 
         user: User = User.query.filter_by(username=session_username).first()
 
         # the user does not exist... can happen
         if not user:
-            error = "Something has gone wrong."
+            flash("Something has gone wrong.")
+            return redirect(request.url)
 
+        # check that the person trying to edit the post is the author
         if user.id != post.user_id:
             error = "You are not the author of this post!"
 
-        if error:
-            flash(error)
-            return render_template("createpost.html", text=post.content)
+        # upload the new image and delete the old one
+        if post_has_image:
+            os.remove(os.path.join(REAL_PATH, post.image))
+            file = request.files["image"]
+            if file.filename == "" or not is_file_allowed(file.filename):
+                flash("That file is not valid")
+                return redirect(request.url)
+            filename = secure_filename(file.filename)
 
-        post.content = post_text
+            # when saving, we need absolute path
+            img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
+
+            # when displaying in html, we need relative path
+            img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
+
+            file.save(img_abs_path)
+            db.session.add(Post(user_id=user.id, username=user.username,
+                                content=post_text, date_time=datetime.now(), 
+                                image=img_rel_path))
+        else:
+            db.session.add(Post(user_id=user.id, username=user.username,
+                                content=post_text, date_time=datetime.now()))
         db.session.commit()
         return redirect(url_for("feed.feed"))
-
     return render_template("createpost.html", text=post.content)
