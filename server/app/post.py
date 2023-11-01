@@ -38,7 +38,7 @@ def create():
     """
     if request.method == "POST":
         post_text = request.form["posttext"]
-        post_has_image = "image" in request.files
+        post_has_image = "image" in request.files and request.files["image"].filename != ""
 
         # check if there's no content
         if post_text == "":
@@ -62,7 +62,7 @@ def create():
         # create post
         if post_has_image:
             file = request.files["image"]
-            if file.filename == "" or not is_file_allowed(file.filename):
+            if not is_file_allowed(file.filename):
                 flash("That file is not valid")
                 return redirect(request.url)
             filename = secure_filename(file.filename)
@@ -72,7 +72,7 @@ def create():
 
             # when displaying in html, we need relative path
             img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
-            
+
             file.save(img_abs_path)
             db.session.add(Post(user_id=user.id, username=user.username,
                                 content=post_text, date_time=datetime.now(), 
