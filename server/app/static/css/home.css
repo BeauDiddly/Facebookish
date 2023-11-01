@@ -95,6 +95,10 @@ body, html {
     font-size: large;
 }
 
+.post img {
+    max-width: 400px;
+    max-height: 400px;
+}
 
 /* friend request styles START */
 .sidebar-list {
@@ -142,6 +146,10 @@ body, html {
 
 .decline:hover {
     background-color: rgb(255, 132, 132);
+}
+
+.add_friend_box {
+    margin-top: 10px;
 }
 /* button styles END */
 /* friend request styles END */

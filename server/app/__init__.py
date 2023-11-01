@@ -17,6 +17,8 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
+    from . import auth, index, friends, post, feed
+
     with app.app_context():
         db.create_all()
 
@@ -26,7 +28,6 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import auth, index, friends, post, feed
 
     # register blueprints
     app.register_blueprint(index.bp)

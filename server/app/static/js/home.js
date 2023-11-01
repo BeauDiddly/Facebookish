@@ -205,7 +205,7 @@ async function fetchRequests() {
       }
 
       // If no friend requests returned
-      friendList.textContent = 'No friends!'
+      friendList.textContent = 'No friends :('
 
     } catch (error) {
       console.error('Error:', error);

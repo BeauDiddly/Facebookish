@@ -6,11 +6,15 @@ from .models import Post, User
 from app import db
 from datetime import datetime
 
+import os
+
 # define blueprint
 bp = Blueprint("post", __name__, url_prefix="/post")
 
-IMAGE_UPLOAD_DIRECTORY = "/upload/images"
-ALLOWED_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif"]
+IMAGE_UPLOAD_REL_DIRECTORY = "static\\upload\\images"
+IMAGE_UPLOAD_DIRECTORY = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), IMAGE_UPLOAD_REL_DIRECTORY)
+ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 
 
 def is_file_allowed(filename: str) -> bool:
@@ -19,6 +23,7 @@ def is_file_allowed(filename: str) -> bool:
     :param filename: the filename to check
     :return: whether the file is valid or not
     """
+    print(f"ext: {filename.rsplit('.', 1)[1].lower()}")
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -56,13 +61,20 @@ def create():
         # create post
         if post_has_image:
             file = request.files["image"]
-            if file == "" or not is_file_allowed(file):
+            if file.filename == "" or not is_file_allowed(file.filename):
                 flash("That file is not valid")
                 return redirect(request.url)
-        db.session.add(Post(user_id=user.id, username=user.username,
-                            content=post_text, date_time=datetime.now()))
+            filename = secure_filename(file.filename)
+            img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
+            img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
+            file.save(img_abs_path)
+            db.session.add(Post(user_id=user.id, username=user.username,
+                                content=post_text, date_time=datetime.now(), 
+                                image=img_rel_path))
+        else:
+            db.session.add(Post(user_id=user.id, username=user.username,
+                                content=post_text, date_time=datetime.now()))
         db.session.commit()
-
         return redirect(url_for("feed.feed"))
     return render_template("createpost.html", text="")
 

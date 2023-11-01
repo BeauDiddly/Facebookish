@@ -22,7 +22,6 @@ def get_friends(user_id):
     
     # If no friend requests for user
     friends = user.friends.all()
-    print(friends)
     if not friends:
         return jsonify({
             'status': 'success',
@@ -58,7 +57,6 @@ def get_friend_requests(user_id):
     
     # If no friend requests for user
     friend_requests = FriendRequest.query.filter_by(to_user_id=user_id).all()
-    print(friend_requests)
     if not friend_requests:
         return jsonify({
             'status': 'success',
@@ -85,11 +83,9 @@ def add_friend():
     data: dict = request.get_json()
     friend_id = data.get('friend_id')
     user_id = data.get('user_id')
-    print(friend_id, user_id)
 
     # Get friend request from database and remove it
     request_to_remove = FriendRequest.query.filter_by(from_user_id=friend_id, to_user_id=user_id).first()
-    print(request_to_remove.from_user_id)
     db.session.delete(request_to_remove)
     
     # Add friends. Because of sqlalchemy relationships this should add to both friends lists
