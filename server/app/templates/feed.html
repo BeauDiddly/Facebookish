@@ -6,6 +6,9 @@
     {% for post in feed %}
     <div class="post">
         <p class="post_content">{{ post.content }}</p>
+        {% if post.image and post.image != "" %}
+            <img src="{{ post.image }}">
+        {% endif %}
         <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
         {% if session['username'] == post.username %}
             <p><a href="/post/edit/{{ post.id }}">Edit</a></p>

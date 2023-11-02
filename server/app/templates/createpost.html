@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Edit Post{% endblock %}
+{% block title %}Create Post{% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 <label for="posttext">Put your thoughts here:</label><br>
-<textarea id="posttext" name="posttext" rows="4" cols="50">{{ text }}</textarea>
-<br>
+<textarea id="posttext" name="posttext" rows="4" cols="50">{{ text }}</textarea><br>
+<label for="image">Upload an image:</label><br>
+<input type="file" name="image">
 <input type="submit" value="Submit">
 </form>
 {% endblock %}

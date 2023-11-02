@@ -88,7 +88,6 @@ def get_user_id():
         }), 404
     
     sender: User = User.query.filter_by(username=session_username).first()
-    print(f"id == {sender.id}")
     
     return jsonify({
         'status': 'success',

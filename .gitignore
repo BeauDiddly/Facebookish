@@ -6,3 +6,4 @@
 
 *.pyc
 server/app/post.py
+server/app/static/upload/images

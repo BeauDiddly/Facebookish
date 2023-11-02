@@ -17,6 +17,11 @@ def feed():
     
     current_user: User = User.query.filter_by(username=session_username).first()
 
+    if not current_user:
+        error = "Something has gone awfully awry."
+        flash(error)
+        return redirect(url_for("logout"))
+
     friend_id_list: list[int] = [friend.id for friend in current_user.friends.all()]
     friend_id_list.append(current_user.id)
 
