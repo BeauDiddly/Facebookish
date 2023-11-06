@@ -70,6 +70,9 @@ def create():
             # when saving, we need absolute path
             img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
 
+            if not os.path.exists(img_abs_path):
+                os.mkdir(img_abs_path)
+
             # when displaying in html, we need relative path
             img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
 
