@@ -104,7 +104,7 @@ def edit(post_id):
 
     if request.method == "POST":
         post_text = request.form["posttext"]
-        post_has_image = "image" in request.files
+        post_has_image = "image" in request.files and request.files["image"].filename != ""
 
         if post_text == "":
             error = "You cannot post nothing!"
@@ -143,12 +143,8 @@ def edit(post_id):
             img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
 
             file.save(img_abs_path)
-            db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now(), 
-                                image=img_rel_path))
-        else:
-            db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now()))
+            post.image = img_rel_path
+        post.content = post_text
         db.session.commit()
         return redirect(url_for("feed.feed"))
     return render_template("createpost.html", text=post.content)
