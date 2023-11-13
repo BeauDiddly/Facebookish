@@ -18,16 +18,10 @@ def login():
         # track error
         error = None
 
-        # if they didn't input a username or password
-        if not input_username or not input_password:
-            error = "Username and password are required"
-
         user: User = User.query.filter_by(username=input_username).first()
-
-        if not user:
-            error = "That user does not exist"
-        elif user.password != input_password:
-            error = "Incorrect password"
+        # if they didn't input a username or password
+        if not input_username or not input_password or not user or user.password != input_password:
+            error = "Invalid Username or Password"
 
         session["username"] = input_username
 
@@ -35,6 +29,7 @@ def login():
             flash(error)
             return render_template("login.html")
 
+        # TODO, fix this to properly display users posts. Home has become My Account
         return redirect(url_for("home"))
 
     return render_template("login.html")
