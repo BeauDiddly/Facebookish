@@ -15,7 +15,8 @@ body, html {
     display: flex;
     flex: 1;
     padding: 0 20px;
-    max-height: 10%;
+    max-height: 75px;
+    min-height: 75px;
     background-color: #67a3ba;
     color: white;
 }
