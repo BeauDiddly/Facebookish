@@ -17,7 +17,7 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from . import auth, index, friends, post, feed
+    from . import auth, index, friends, post, feed, my_account
 
     with app.app_context():
         db.create_all()
@@ -35,6 +35,7 @@ def create_app(test_config=None):
     app.register_blueprint(friends.bp)
     app.register_blueprint(post.bp)
     app.register_blueprint(feed.bp)
+    app.register_blueprint(my_account.bp)
     
     # Home page
     @app.route('/home')

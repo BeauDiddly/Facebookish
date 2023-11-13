@@ -4,10 +4,26 @@
 
 {% block content %}
     {% if session.get("username") %}
-    <p>
-        Logged in as {{ session['username'] }} <br>
-        <a href="{{ url_for('auth.logout') }}">Log Out</a>
-    </p>
+    <div>
+        <div class="top">
+            <div class="username">
+                {{ session.get("username") }}
+            </div>
+        </div>
+        <!-- Add posts from the logged in user -->
+        {% for post in feed %}
+        <div class="post">
+            <p class="post_content">{{ post.content }}</p>
+            {% if post.image and post.image != "" %}
+                <img src="{{ post.image }}">
+            {% endif %}
+            <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
+            {% if session['username'] == post.username %}
+                <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
     {% else %}
     <p>
         Please <a href="{{ url_for('auth.login') }}">Log In</a>

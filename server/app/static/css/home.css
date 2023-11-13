@@ -26,8 +26,11 @@ body, html {
 }
 
 .nav_buttons {
-    display: block;
-    flex: 1;
+    display: flex;
+    flex: 4;
+    font-size: 1.5em;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .nav_buttons a {
@@ -155,3 +158,15 @@ body, html {
 /* button styles END */
 /* friend request styles END */
 /* main content styles END */
+
+/* Home/My account page styles */
+.top {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+}
+
+.username {
+    font-size: 2em;
+}
