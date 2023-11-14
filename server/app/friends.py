@@ -145,4 +145,4 @@ def send_request():
     else:
         db.session.add(FriendRequest(from_user_id=sender.id, to_user_id=target.id))
         db.session.commit()
-    return redirect(url_for("feed.feed"))
+    return redirect(request.referrer or url_for('feed.feed'))
