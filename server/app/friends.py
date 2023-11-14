@@ -145,20 +145,21 @@ def send_request():
         error = "Something has gone awfully awry."
 
     # Checks existing for incoming or outgoing request
-    existing_outgoing_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
-    existing_incoming_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
-    if existing_outgoing_request:
-        error = "Request is already sent! Waiting on response."
-    elif existing_incoming_request:
-        error = "This user has requested you! Check request list."
+    if target:
+        existing_outgoing_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
+        existing_incoming_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
+        if existing_outgoing_request:
+            error = "Request is already sent! Waiting on response."
+        elif existing_incoming_request:
+            error = "This user has requested you! Check request list."
     
-    friend_ids = [friend.id for friend in sender.friends]
-    if target.id in friend_ids:
-        error = "You are already friends with this user."
+        friend_ids = [friend.id for friend in sender.friends]
+        if target.id in friend_ids:
+            error = "You are already friends with this user."
 
-    # Finally, if user attempts to add themselves
-    if sender.id == target.id:
-        error="Nice try. You cannot be friends with yourself."
+        # Finally, if user attempts to add themselves
+        if sender.id == target.id:
+            error="Nice try. You cannot be friends with yourself."
 
     if error:
         flash(error)
