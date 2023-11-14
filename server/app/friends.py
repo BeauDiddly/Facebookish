@@ -151,6 +151,10 @@ def send_request():
         error = "Request is already sent! Waiting on response."
     elif existing_incoming_request:
         error = "This user has requested you! Check request list."
+    
+    friend_ids = [friend.id for friend in sender.friends]
+    if target.id in friend_ids:
+        error = "You are already friends with this user."
 
     # Finally, if user attempts to add themselves
     if sender.id == target.id:
