@@ -29,4 +29,9 @@ def user_page():
     feed.sort(key=lambda post: post.date_time)
     feed.reverse()
 
-    return render_template("home.html", feed=feed, bio='My name is Kaitlyn.')
+    bio = "User of Facebook-ish"
+    if current_user.bio:
+        bio = current_user.bio
+    db.session.commit()
+
+    return render_template("home.html", feed=feed, bio=bio)

@@ -9,9 +9,11 @@
         {% if post.image and post.image != "" %}
             <img src="{{ post.image }}">
         {% endif %}
-        <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
         {% if session['username'] == post.username %}
-            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        <p class="post_author">posted by you @ {{ post.date_time }}</p>
+        <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        {% else %}
+        <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
         {% endif %}
     </div>
     {% endfor %}

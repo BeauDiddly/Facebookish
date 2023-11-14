@@ -125,20 +125,36 @@ def send_request():
 
     target_username = request.form["friend"]
 
+    # If target_username is empy
     if not target_username:
         error = "You know what you did."
 
+    # If target user does not exist
     target: User = User.query.filter_by(username=target_username).first()
-    if not target:
+    if not target and target_username:
         error = "That user does not exist!"
 
+    # if user is not signed in
     sender_username = session.get("username")
     if not sender_username:
         error = "You are not signed in!" 
 
+    # If sender somehow does not exist
     sender: User = User.query.filter_by(username=sender_username).first()
     if not sender:
         error = "Something has gone awfully awry."
+
+    # Checks existing for incoming or outgoing request
+    existing_outgoing_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
+    existing_incoming_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
+    if existing_outgoing_request:
+        error = "Request is already sent! Waiting on response."
+    elif existing_incoming_request:
+        error = "This user has requested you! Check request list."
+
+    # Finally, if user attempts to add themselves
+    if sender.id == target.id:
+        error="Nice try. You cannot be friends with yourself."
 
     if error:
         flash(error)
