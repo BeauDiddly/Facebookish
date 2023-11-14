@@ -76,9 +76,8 @@ body, html {
     flex-direction: column;
     align-items: left;
     text-align: center;
-    flex: 1;
+    flex: 0;
     background-color: rgb(227, 245, 255);
-    max-width: max(11%, 100px);
     color: red;
 }
 .temp {
