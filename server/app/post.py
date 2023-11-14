@@ -142,13 +142,13 @@ def edit(post_id):
 
         # upload the new image and delete the old one
         if post_has_image:
-
             # Check if the directory already exists
             if not os.path.exists(IMAGE_UPLOAD_DIRECTORY):
                 # Create the directory, also create intermediate directories if necessary
                 os.makedirs(IMAGE_UPLOAD_DIRECTORY)
 
-            os.remove(os.path.join(REAL_PATH, post.image))
+            if post.image:
+                os.remove(os.path.join(REAL_PATH, post.image))
             file = request.files["image"]
             if file.filename == "" or not is_file_allowed(file.filename):
                 flash("That file is not valid")
