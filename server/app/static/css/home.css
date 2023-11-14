@@ -161,11 +161,14 @@ body, html {
 /* Home/My account page styles */
 .top {
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     padding: 10px;
 }
 
 .username {
     font-size: 2em;
+}
+.bio {
 }

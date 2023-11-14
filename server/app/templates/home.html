@@ -6,9 +6,12 @@
     {% if session.get("username") %}
     <div>
         <div class="top">
-            <div class="username">
-                {{ session.get("username") }}
-            </div>
+            <span class="username">
+                {{ session.get("username") }}'s Page
+            </span>
+            <span class="bio">
+                {{ bio }}
+            </span>
         </div>
         <!-- Add posts from the logged in user -->
         {% for post in feed %}

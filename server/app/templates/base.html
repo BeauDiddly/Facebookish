@@ -15,7 +15,7 @@
             {% if session.get("username") %}
             <div class="nav_buttons">
                 <h2 class="logged_in_as">Logged in as {{ session['username'] }}</h2>
-                <a href="/my_account">My Account</a>
+                <a href="/my_page">My Page</a>
                 <a href="/feed">Feed</a>
                 <a href="/post/create">New Post</a>
                 <a href="/auth/logout">Logout</a>
@@ -32,6 +32,7 @@
             <div class="left">
                 <div class="temp">{% block content %}{% endblock %}</div>
             </div>
+            {% if session.get("username") %}
             <div class="right">
                 <h4>Friend Requests</h3>
                     <ul id="request-list" class="sidebar-list">
@@ -50,6 +51,7 @@
                     
                 </ul>
             </div>
+            {% endif %}
         </div>
     </div>
     <script src="../static/js/home.js"></script>

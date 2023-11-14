@@ -6,9 +6,9 @@ from flask import (
 from .models import User, Post
 
 # define blueprint
-bp = Blueprint("my_account", __name__)
+bp = Blueprint("my_page", __name__)
 
-@bp.route("/my_account", methods=["GET"])
+@bp.route("/my_page", methods=["GET"])
 def user_page():
     session_username = session.get("username")
 
@@ -29,4 +29,4 @@ def user_page():
     feed.sort(key=lambda post: post.date_time)
     feed.reverse()
 
-    return render_template("home.html", feed=feed)
+    return render_template("home.html", feed=feed, bio='My name is Kaitlyn.')

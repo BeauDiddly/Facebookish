@@ -22,14 +22,14 @@ def login():
         # if they didn't input a username or password
         if not input_username or not input_password or not user or user.password != input_password:
             error = "Invalid Username or Password"
-
-        session["username"] = input_username
+        else:
+            session["username"] = input_username
 
         if error:
             flash(error)
             return render_template("login.html")
 
-        return redirect(url_for("my_account.user_page"))
+        return redirect(url_for("my_page.user_page"))
 
     return render_template("login.html")
 
