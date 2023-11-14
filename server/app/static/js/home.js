@@ -18,6 +18,7 @@ async function rejectFriend(friend_id, user_id, li) {
     if (requestList.children.length === 0) {
         requestList.textContent = 'No friend requests!'
     }
+    window.location.reload()
 }
 
 
@@ -40,6 +41,7 @@ async function addFriend(friend_id, user_id, li) {
     if (requestList.children.length === 0) {
         requestList.textContent = 'No friend requests!'
     }
+    window.location.reload()
 }
 
 requestList = document.querySelector('#request-list');

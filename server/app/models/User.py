@@ -10,6 +10,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250))
     password = db.Column(db.String(250))
+    bio = db.Column(db.String(500))
     friends = db.relationship('User', secondary=friends,
                               primaryjoin=(friends.c.user_id == id),
                               secondaryjoin=(friends.c.friend_id == id),
