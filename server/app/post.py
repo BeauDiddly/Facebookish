@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from .models import Post, User
 from app import db
 from datetime import datetime
+from util import get_session_user
 
 import os
 
@@ -149,3 +150,20 @@ def edit(post_id):
         db.session.commit()
         return redirect(url_for("feed.feed"))
     return render_template("createpost.html", text=post.content)
+
+
+@bp.route("/like/<int:post_id>", methods=["GET"])
+def like(post_id):
+    post: Post = Post.query.get(post_id)
+
+    if not post:
+        flash("That post does not exist!")
+        return redirect(url_for("feed.feed"))
+    
+    user = get_session_user(session)
+
+    if not user:
+        flash("You are not signed in")
+        return redirect(url_for("feed.feed"))
+    
+    

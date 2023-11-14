@@ -1,5 +1,19 @@
 from app import db
 
+likes = db.Table("likes",
+    db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True)
+)
+
+# shares = db.Table("shares",
+#     db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
+#     db.Column("shared_id", db.Integer, db.ForeignKey("post.id"), primary_key=True)
+# )
+
+# comments = db.Table("comments",
+#     db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
+#     db.Column("comment_id", db.Integer, db.ForeignKey("comment.id"), primary_key=True)
+# )
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,6 +22,10 @@ class Post(db.Model):
     content = db.Column(db.String(500))
     date_time = db.Column(db.DateTime)
     image = db.Column(db.String(500))
-    # likes = db.Column(db.Integer)
+    likes = db.relationship('User', secondary=likes,
+                            primaryjoin=(likes.c.post_id == id),
+                            secondaryjoin=(likes.c.user_id == id),
+                            backref=db.backref("liked_by", lazy="dynamic"),
+                            lazy="dynamic")
     # shares = db.Column(db.Integer)
     # comments = db.relationship('Comment', backref='post')
