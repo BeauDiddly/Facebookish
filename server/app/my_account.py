@@ -9,7 +9,7 @@ from .models import User, Post
 bp = Blueprint("my_account", __name__)
 
 @bp.route("/my_account", methods=["GET"])
-def feed():
+def user_page():
     session_username = session.get("username")
 
     if not session_username:

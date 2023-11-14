@@ -29,8 +29,7 @@ def login():
             flash(error)
             return render_template("login.html")
 
-        # TODO, fix this to properly display users posts. Home has become My Account
-        return redirect(url_for("home"))
+        return redirect(url_for("my_account.user_page"))
 
     return render_template("login.html")
 

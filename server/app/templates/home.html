@@ -25,6 +25,7 @@
         {% endfor %}
     </div>
     {% else %}
+    <!-- if not logged in -->
     <p>
         Please <a href="{{ url_for('auth.login') }}">Log In</a>
         or <a href="{{ url_for('auth.register') }}">Register</a>
