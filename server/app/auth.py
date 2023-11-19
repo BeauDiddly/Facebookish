@@ -59,7 +59,7 @@ def register():
             flash(error)
             return render_template("register.html")
         
-        db.session.add(User(username=input_username, password=confirm_password))
+        db.session.add(User(username=input_username, password=confirm_password, bio='User of Facebook-ish.'))
         db.session.commit()
         return redirect(url_for("feed.feed"))
 

@@ -186,6 +186,7 @@ async function fetchRequests() {
         const userLink = document.createElement('a');
         userLink.href = `/friends/user_page/${friend.friend_user_id}`;
         userLink.textContent = friend.friend_username;
+        userLink.classList.add('user-link');
 
         // Append the anchor element to the list item
         li.appendChild(userLink);

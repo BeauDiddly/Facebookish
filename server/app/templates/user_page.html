@@ -21,7 +21,7 @@
             {% if post.image and post.image != "" %}
                 <img src="{{ post.image }}">
             {% endif %}
-            <p class="post_author">posted by you @ {{ post.date_time }}</p>
+            <p class="post_author">posted by {{ username }} @ {{ post.date_time }}</p>
             {% if session['username'] == post.username %}
                 <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
             {% endif %}
@@ -29,7 +29,7 @@
         {% endfor %}
         {% else %}
         <span>
-            You have no posts..
+            {{ username }} has no posts..
         </span>
         {% endif %}
     </div>
