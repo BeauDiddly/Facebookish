@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}User{% endblock %}
+
+{% block content %}
+    {% if session.get("username") %}
+    <div>
+        <div class="top">
+            <span class="username">
+                {{ username }}'s Page
+            </span>
+            <span class="bio">
+                {{ bio }}
+            </span>
+        </div>
+        <!-- Add posts from the logged in user -->
+        {% if feed %}
+        {% for post in feed %}
+        <div class="post">
+            <p class="post_content">{{ post.content }}</p>
+            {% if post.image and post.image != "" %}
+                <img src="{{ post.image }}">
+            {% endif %}
+            <p class="post_author">posted by you @ {{ post.date_time }}</p>
+            {% if session['username'] == post.username %}
+                <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <span>
+            You have no posts..
+        </span>
+        {% endif %}
+    </div>
+    {% else %}
+    <!-- if not logged in -->
+    <p>
+        Please <a href="{{ url_for('auth.login') }}">Log In</a>
+        or <a href="{{ url_for('auth.register') }}">Register</a>
+    </p>
+    {% endif %}
+{% endblock %}
