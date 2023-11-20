@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, jsonify, request, session, flash, redirect, url_for
+    Blueprint, jsonify, request, session, flash, redirect, url_for, render_template
 )
 
 from .models import User, FriendRequest
@@ -77,6 +77,22 @@ def get_friend_requests(user_id):
         'status': 'success',
         'data': friend_requests_list
     }), 200
+
+@bp.route('/user_page/<int:user_id>')
+def view_user_page(user_id):
+
+    user = User.query.get(user_id)
+
+    if user:
+        username = user.username
+        bio = user.bio
+        posts = user.posts
+
+        posts.sort(key=lambda post: post.date_time)
+        posts.reverse()
+
+        # render user page, pass username, bio, posts
+        return render_template("user_page.html", username=username, bio=bio, feed=posts)
 
 @bp.route('/add', methods=['POST'])
 def add_friend():

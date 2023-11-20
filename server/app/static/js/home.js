@@ -22,6 +22,22 @@ async function rejectFriend(friend_id, user_id, li) {
 }
 
 
+
+async function viewUserPage(user_id) {
+    /*
+      Sends user_id to server to render the specific users page
+    */
+    response = await fetch('/friends/user_page', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({user_id})
+    });
+}
+
+
+
 async function addFriend(friend_id, user_id, li) {
     /*
     Sends the id of the requester and the active user to the server to add friend
@@ -157,14 +173,28 @@ async function fetchRequests() {
     reject or accept the friend request
     */
 
-    data.forEach(request => {
+    data.forEach(friend => {
         const li = document.createElement('li');
         li.classList.add('request')
+    
+        // // Create element to hold username
+        // const usernameElement = document.createElement('span')
+        // usernameElement.textContent=friend.friend_username;
+        // li.appendChild(usernameElement)
 
-        // Create element to hold username
-        const usernameElement = document.createElement('span')
-        usernameElement.textContent=request.friend_username;
-        li.appendChild(usernameElement)
+        // Create an anchor element to hold the username and link to the user page
+        const userLink = document.createElement('a');
+        userLink.href = `/friends/user_page/${friend.friend_user_id}`;
+        userLink.textContent = friend.friend_username;
+        userLink.classList.add('user-link');
+
+        // Append the anchor element to the list item
+        li.appendChild(userLink);
+
+        // li.onclick = () => {
+        //     console.log(friend.friend_user_id)
+        //     viewUserPage(friend.friend_user_id);
+        // }
 
         friendList.appendChild(li);
     });

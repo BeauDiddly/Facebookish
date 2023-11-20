@@ -1,22 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}User{% endblock %}
 
 {% block content %}
     {% if session.get("username") %}
     <div>
         <div class="top">
             <span class="username">
-                {{ session.get("username") }}'s Page
+                {{ username }}'s Page
             </span>
             <span class="bio">
                 {{ bio }}
-                <span id="edit-bio">Change Bio</span>
             </span>
-            <form action="/my_page/{{ session.get("username") }}/update_bio" method="post" id="bio-form" class="hidden-update-bio-form update-bio-form">
-                <textarea name="bio" rows="4" cols="50"></textarea>
-                <input type="submit" value="Update Bio">
-            </form>
         </div>
         <!-- Add posts from the logged in user -->
         {% if feed %}
@@ -26,7 +21,7 @@
             {% if post.image and post.image != "" %}
                 <img src="{{ post.image }}">
             {% endif %}
-            <p class="post_author">posted by you @ {{ post.date_time }}</p>
+            <p class="post_author">posted by {{ username }} @ {{ post.date_time }}</p>
             {% if session['username'] == post.username %}
                 <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
             {% endif %}
@@ -34,7 +29,7 @@
         {% endfor %}
         {% else %}
         <span>
-            You have no posts..
+            {{ username }} has no posts..
         </span>
         {% endif %}
     </div>

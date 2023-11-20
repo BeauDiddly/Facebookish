@@ -130,6 +130,11 @@ body, html {
     text-align: left;
 }
 
+.user-link {
+    color: black;
+    text-decoration: none;
+}
+
 /* button styles START */
 .requestButtonContainer {
     display: flex;
@@ -176,8 +181,26 @@ body, html {
 
 .username {
     font-size: 2em;
+    margin-bottom: 5px;
 }
 .bio {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 500px;
+}
+
+.update-bio-form {
+    margin-top: 10px;
+}
+.hidden-update-bio-form {
+    display: none;
+}
+
+#edit-bio {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
 }
 /* Home/My account page styles END*/
 
