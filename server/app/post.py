@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from .models import Post, User
 from app import db
 from datetime import datetime
-from util import get_session_user
+from .util import get_session_user
 
 import os
 
@@ -77,10 +77,11 @@ def create():
             file.save(img_abs_path)
             db.session.add(Post(user_id=user.id, username=user.username,
                                 content=post_text, date_time=datetime.now(), 
-                                image=img_rel_path))
+                                image=img_rel_path, likes=[], like_count=0))
         else:
             db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now()))
+                                content=post_text, date_time=datetime.now(), 
+                                likes=[], like_count=0))
         db.session.commit()
         return redirect(url_for("feed.feed"))
     return render_template("createpost.html", text="")
@@ -166,4 +167,14 @@ def like(post_id):
         flash("You are not signed in")
         return redirect(url_for("feed.feed"))
     
+    if user in post.likes:
+        post.like_count -= 1
+        post.likes.remove(user)
+    else:
+        post.like_count += 1
+        post.likes.append(user)
+
+    db.session.commit()
+
+    return redirect(url_for("feed.feed"))
     

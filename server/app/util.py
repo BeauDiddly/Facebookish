@@ -1,4 +1,4 @@
-from models import User
+from .models import User
 
 
 def get_session_user(session) -> User:
