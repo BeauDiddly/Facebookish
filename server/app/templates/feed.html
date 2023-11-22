@@ -10,9 +10,12 @@
             <img src="{{ post.image }}">
         {% endif %}
         <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}, likes: {{ post.like_count }}</p>
+        <p>
         {% if session['username'] == post.username %}
-            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+            <a href="/post/edit/{{ post.id }}">Edit</a>
         {% endif %}
+            <a href="/post/like/{{ post.id }}">Like</a>
+        </p>
     </div>
     {% endfor %}
 {% endblock %}

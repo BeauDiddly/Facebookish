@@ -1,5 +1,4 @@
 from app import db
-from sqlalchemy
 
 likes = db.Table("likes",
     db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
@@ -25,7 +24,6 @@ class Post(db.Model):
     image = db.Column(db.String(500))
     likes = db.relationship('User', secondary=likes,
                             primaryjoin=(likes.c.post_id == id),
-                            secondaryjoin=(likes.c.user_id == id),
                             backref=db.backref("liked_by", lazy="dynamic"),
                             lazy="dynamic")
     like_count = db.Column(db.Integer)
