@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}Feed{% endblock %}
+{% block title %}View Post{% endblock %}
 
 {% block content %}
-    {% for post in feed %}
     <div class="post">
         <p class="post_content">{{ post.content }}</p>
         {% if post.image and post.image != "" %}
@@ -23,7 +22,7 @@
         {% if session['username'] == post.username and post.original_poster_username == None %}
             <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
         {% endif %}
-
+        
         <p>
             Likes: {{ post.like_count }}, Comments: {{ post.comment_count }}
             {% if post.original_poster_id == None %}
@@ -36,11 +35,22 @@
             <a href="/post/like/{{ post.id }}">Like</a>
         {% endif %}
         <a href="/post/comment/{{ post.id }}">Comment</a>
-        <a href="/post/{{ post.id }}">View Post</a>
         {% if post.original_poster_id == None %}
             <a href="/post/share/{{ post.id }}">Share Post</a>
         {% endif %}
         </p>
     </div>
-    {% endfor %}
+    <div class="comments">
+        <p>Comments:</p>
+        {% if post.comment_count == 0 %}
+            <p>No comments!</p>
+        {% else %}
+            {% for comment in post.comments %}
+                <div class="post">
+                    <p class="post_content">{{ comment.content }}</p>
+                    <p class="post_author">posted by {{ comment.username }} @ {{ comment.date_time }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 {% endblock %}

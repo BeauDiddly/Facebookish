@@ -6,5 +6,5 @@ class Comment(db.Model):
     content = db.Column(db.String(500))
     date_time = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    username = db.Column(db.String(500))
     

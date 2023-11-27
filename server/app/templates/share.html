@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Comment{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="share-post">
+    <div>
+        <label for="submit">Are you sure you want to share the post?</label><br>
+    </div>
+    <div>
+        <input type="submit" value="Share">
+    </div>
+</form>
+{% endblock %}

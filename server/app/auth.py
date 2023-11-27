@@ -24,6 +24,7 @@ def login():
             error = "Invalid Username or Password"
         else:
             session["username"] = input_username
+            session["user_id"] = user.id
 
         if error:
             flash(error)
@@ -69,6 +70,7 @@ def register():
 @bp.route("/logout")
 def logout():
     session.pop("username", None)
+    session.pop("user_id", None)
     return redirect(url_for("home"))
 
 @bp.route("/get_user_id", methods=['GET'])
