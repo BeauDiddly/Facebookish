@@ -28,6 +28,16 @@ def is_file_allowed(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@bp.route("/<int:post_id>")
+def view_post(post_id):
+    post: Post = Post.query.get(post_id)
+
+    if not post:
+        flash("That post does not exist!")
+        return redirect(url_for("feed.feed"))
+
+    return render_template("post.html", post=post)
+
 @bp.route("/create", methods=["POST", "GET"])
 def create():
     """Creates a post as the signed in user.
