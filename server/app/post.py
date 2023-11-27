@@ -2,7 +2,7 @@ from flask import (
     render_template, request, session, redirect, Blueprint, url_for, flash
 )
 from werkzeug.utils import secure_filename
-from .models import Post, User
+from .models import Post, User, Comment
 from app import db
 from datetime import datetime
 from .util import get_session_user
@@ -24,9 +24,10 @@ def is_file_allowed(filename: str) -> bool:
     :param filename: the filename to check
     :return: whether the file is valid or not
     """
-    print(f"ext: {filename.rsplit('.', 1)[1].lower()}")
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_extension(filename: str) -> str:
+    return '.' in filename and filename.rsplit('.', 1)[1].lower()
 
 @bp.route("/<int:post_id>")
 def view_post(post_id):
@@ -69,10 +70,15 @@ def create():
         if not user:
             flash("Something has gone wrong.")
             return redirect(request.url)
+        
+        post = Post(user_id=user.id, username=user.username,
+                    content=post_text, date_time=datetime.now(), 
+                    likes=[], like_count=0, comment_count=0, share_count=0)
+        
+        db.session.add(post)
+        db.session.commit()
 
-        # create post
         if post_has_image:
-
             # Check if the directory already exists
             if not os.path.exists(IMAGE_UPLOAD_DIRECTORY):
                 # Create the directory, also create intermediate directories if necessary
@@ -82,7 +88,8 @@ def create():
             if not is_file_allowed(file.filename):
                 flash("That file is not valid")
                 return redirect(request.url)
-            filename = secure_filename(file.filename)
+            
+            filename = f"{post.id}.{get_extension(file.filename)}"
 
             # when saving, we need absolute path
             img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
@@ -95,13 +102,9 @@ def create():
 
             file.save(img_abs_path)
             print(img_rel_path)
-            db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now(), 
-                                image=img_rel_path, likes=[], like_count=0))
-        else:
-            db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now(), 
-                                likes=[], like_count=0))
+            img_rel_path = "\\" + img_rel_path
+            post.image = img_rel_path
+
         db.session.commit()
         return redirect(url_for("feed.feed"))
     return render_template("createpost.html", text="")
@@ -137,7 +140,6 @@ def edit(post_id):
 
         user: User = User.query.filter_by(username=session_username).first()
 
-
         error = None
 
         # check that the person trying to edit the post is the author
@@ -160,12 +162,14 @@ def edit(post_id):
                 os.makedirs(IMAGE_UPLOAD_DIRECTORY)
 
             if post.image:
-                os.remove(os.path.join(REAL_PATH, post.image))
+                os.remove(os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, post.image))
+
             file = request.files["image"]
             if file.filename == "" or not is_file_allowed(file.filename):
                 flash("That file is not valid")
                 return redirect(request.url)
-            filename = secure_filename(file.filename)
+            
+            filename = f"{post.id}.{get_extension(file.filename)}"
 
             # when saving, we need absolute path
             img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
@@ -204,5 +208,72 @@ def like(post_id):
 
     db.session.commit()
 
-    return redirect(url_for("feed.feed"))
+    return redirect(f"../{post.id}")
     
+@bp.route("/comment/<int:post_id>", methods=["GET", "POST"])
+def comment(post_id):
+    post: Post = Post.query.get(post_id)
+
+    if not post:
+        flash("That post does not exist!")
+        return redirect(url_for("feed.feed"))
+    
+    if request.method == "POST":
+        comment_text = request.form["comtext"]
+
+        if comment_text == "":
+            flash("You cannot post nothing!")
+            return redirect(request.url)
+        
+        session_username = session.get("username")
+
+        # check that the user is signed in
+        if not session_username:
+            flash("You are not signed in!")
+            return redirect(request.url)
+
+        user: User = User.query.filter_by(username=session_username).first()
+
+        # the user does not exist... can happen
+        if not user:
+            flash("Something has gone wrong.")
+            return redirect(request.url)
+        
+        comment = Comment(post_id=post.id, content=comment_text, date_time=datetime.now(),
+                          user_id=user.id, username=user.username)
+        db.session.add(comment)
+        post.comments.append(comment)
+        post.comment_count += 1
+        db.session.commit()
+        return redirect(f"/post/{post.id}")
+    return render_template("createcomment.html")
+
+@bp.route("/share/<int:post_id>", methods=["GET", "POST"])
+def share(post_id):
+    post: Post = Post.query.get(post_id)
+
+    if not post:
+        flash("That post does not exist!")
+        return redirect(url_for("feed.feed"))
+    
+    if post.original_poster_id != None:
+        flash("That post cannot be shared again!")
+        return redirect(f"/post/{post.id}")
+    
+    user = get_session_user(session)
+
+    if not user:
+        flash("You are not signed in")
+        return redirect(url_for("feed.feed"))
+    
+    if request.method == "POST":
+        post = Post(user_id=user.id, username=user.username, 
+                    original_poster_id=post.user_id, 
+                    original_poster_username=post.username,
+                    content=post.content, image=post.image,
+                    comment_count=0, like_count=0)
+        db.session.add(post)
+        db.session.commit()
+        return redirect(f"/post/{post.id}")
+
+    return render_template("share.html")

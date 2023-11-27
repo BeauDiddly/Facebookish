@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Feed{% endblock %}
+{% block title %}View Post{% endblock %}
 
 {% block content %}
     <div class="post">
@@ -8,9 +8,52 @@
         {% if post.image and post.image != "" %}
             <img src="{{ post.image }}">
         {% endif %}
+
+
+        {% if post.original_poster_username == None %}
         <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
+        {% else %}
+        <p class="post_author">
+            shared by {{ post.username }} @ {{ post.date_time }},
+            posted by {{ post.original_poster_username }}</p>
+        {% endif %}
+
         {% if session['username'] == post.username %}
             <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        {% else %}
+            <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
+        {% endif %}
+
+        
+        <p>
+            Likes: {{ post.like_count }}, Comments: {{ post.comment_count }}
+            {% if post.original_poster_id == None %}
+                , Shares: {{ post.share_count }}
+            {% endif %}
+            <br>
+        {% if post.username_likes_post(session["username"]) %}
+            <a href="/post/like/{{ post.id }}">Unlike</a>
+        {% else %}
+            <a href="/post/like/{{ post.id }}">Like</a>
+        {% endif %}
+        <a href="/post/comment/{{ post.id }}">Comment</a>
+        <a href="/post/{{ post.id }}">View Post</a>
+        {% if post.original_poster_id == None %}
+            <a href="/post/share/{{ post.id }}">Share Post</a>
+        {% endif %}
+        </p>
+    </div>
+    <div class="comments">
+        <p>Comments:</p>
+        {% if post.comment_count == 0 %}
+            <p>No comments!</p>
+        {% else %}
+            {% for comment in post.comments %}
+                <div class="post">
+                    <p class="post_content">{{ comment.content }}</p>
+                    <p class="post_author">posted by {{ comment.username }} @ {{ comment.date_time }}</p>
+                </div>
+            {% endfor %}
         {% endif %}
     </div>
 {% endblock %}

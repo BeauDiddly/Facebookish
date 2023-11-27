@@ -22,7 +22,7 @@ def feed():
     if not current_user:
         error = "Something has gone awfully awry."
         flash(error)
-        return redirect(url_for("logout"))
+        return redirect(url_for("auth.logout"))
 
     friend_id_list: list[int] = [
         friend.id for friend in current_user.friends.all()]

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Comment{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="create-post">
+    <div>
+        <label for="comtext">Put your thoughts here:</label><br>
+    </div>
+    <div>
+        <textarea id="comtext" name="comtext" rows="4" cols="50"></textarea><br>
+    </div>
+    <div>
+        <input type="submit" value="Submit">
+    </div>
+</form>
+{% endblock %}

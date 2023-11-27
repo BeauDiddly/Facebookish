@@ -20,7 +20,7 @@ def user_page():
     if not current_user:
         error = "Something has gone awfully awry."
         flash(error)
-        return redirect(url_for("logout"))
+        return redirect(url_for("auth.logout"))
     
     feed: list[Post] = []
     posts = Post.query.filter_by(user_id=current_user.id)
