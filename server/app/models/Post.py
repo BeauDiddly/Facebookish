@@ -10,10 +10,10 @@ likes = db.Table("likes",
 #     db.Column("shared_id", db.Integer, db.ForeignKey("post.id"), primary_key=True)
 # )
 
-# comments = db.Table("comments",
-#     db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
-#     db.Column("comment_id", db.Integer, db.ForeignKey("comment.id"), primary_key=True)
-# )
+comments = db.Table("comments",
+    db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
+    db.Column("comment_id", db.Integer, db.ForeignKey("comment.id"), primary_key=True)
+)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +28,11 @@ class Post(db.Model):
                             lazy="dynamic")
     like_count = db.Column(db.Integer)
     # shares = db.Column(db.Integer)
-    # comments = db.relationship('Comment', backref='post')
+    comments = db.relationship('Comment', secondary=comments,
+                               primaryjoin=(comments.c.post_id == id),
+                               secondaryjoin=(comments.c.comment_id == id),
+                               backref=db.backref("comment_on", lazy="dynamic"),
+                               lazy="dynamic")
 
     def username_likes_post(self, username: str):
         return username in [user.username for user in self.likes]
