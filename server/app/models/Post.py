@@ -1,5 +1,4 @@
 from app import db
-from sqlalchemy
 
 likes = db.Table("likes",
     db.Column("post_id", db.Integer, db.ForeignKey("post.id"), primary_key=True),
