@@ -271,7 +271,7 @@ def share(post_id):
                     original_poster_id=post.user_id, 
                     original_poster_username=post.username,
                     content=post.content, image=post.image,
-                    comment_count=0, like_count=0)
+                    comment_count=0, like_count=0, date_time=datetime.now())
         db.session.add(post)
         db.session.commit()
         return redirect(f"/post/{post.id}")

@@ -9,18 +9,36 @@
         {% if post.image and post.image != "" %}
             <img src="{{ post.image }}">
         {% endif %}
-        {% if session['username'] == post.username %}
-            <p class="post_author">posted by you @ {{ post.date_time }}</p>
-            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+
+
+        {% if post.original_poster_username == None %}
+        <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
         {% else %}
-            <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
+        <p class="post_author">
+            posted by {{ post.original_poster_username }}, 
+            shared by {{ post.username }} @ {{ post.date_time }}
+        </p>
         {% endif %}
+
+        {% if session['username'] == post.username and post.original_poster_username == None %}
+            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        {% endif %}
+
         <p>
-            Likes: {{ post.like_count }} <br>
+            Likes: {{ post.like_count }}, Comments: {{ post.comment_count }}
+            {% if post.original_poster_id == None %}
+                , Shares: {{ post.share_count }}
+            {% endif %}
+            <br>
         {% if post.username_likes_post(session["username"]) %}
             <a href="/post/like/{{ post.id }}">Unlike</a>
         {% else %}
             <a href="/post/like/{{ post.id }}">Like</a>
+        {% endif %}
+        <a href="/post/comment/{{ post.id }}">Comment</a>
+        <a href="/post/{{ post.id }}">View Post</a>
+        {% if post.original_poster_id == None %}
+            <a href="/post/share/{{ post.id }}">Share Post</a>
         {% endif %}
         </p>
     </div>
