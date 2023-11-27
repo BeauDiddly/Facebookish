@@ -18,24 +18,19 @@ def login():
         # track error
         error = None
 
-        # if they didn't input a username or password
-        if not input_username or not input_password:
-            error = "Username and password are required"
-
         user: User = User.query.filter_by(username=input_username).first()
-
-        if not user:
-            error = "That user does not exist"
-        elif user.password != input_password:
-            error = "Incorrect password"
-
-        session["username"] = input_username
+        # if they didn't input a username or password
+        if not input_username or not input_password or not user or user.password != input_password:
+            error = "Invalid Username or Password"
+        else:
+            session["username"] = input_username
+            session["user_id"] = user.id
 
         if error:
             flash(error)
             return render_template("login.html")
 
-        return redirect(url_for("home"))
+        return redirect(url_for("my_page.user_page"))
 
     return render_template("login.html")
 
@@ -65,7 +60,7 @@ def register():
             flash(error)
             return render_template("register.html")
         
-        db.session.add(User(username=input_username, password=confirm_password))
+        db.session.add(User(username=input_username, password=confirm_password, bio='User of Facebook-ish.'))
         db.session.commit()
         return redirect(url_for("feed.feed"))
 
@@ -75,6 +70,7 @@ def register():
 @bp.route("/logout")
 def logout():
     session.pop("username", None)
+    session.pop("user_id", None)
     return redirect(url_for("home"))
 
 @bp.route("/get_user_id", methods=['GET'])

@@ -12,7 +12,7 @@ import os
 # define blueprint
 bp = Blueprint("post", __name__, url_prefix="/post")
 
-IMAGE_UPLOAD_REL_DIRECTORY = "static\\upload\\images"
+IMAGE_UPLOAD_REL_DIRECTORY = os.path.join("static", "upload", "images")
 REAL_PATH = os.path.dirname(os.path.realpath(__file__))
 IMAGE_UPLOAD_DIRECTORY = os.path.join(REAL_PATH, IMAGE_UPLOAD_REL_DIRECTORY)
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
@@ -62,6 +62,12 @@ def create():
 
         # create post
         if post_has_image:
+
+            # Check if the directory already exists
+            if not os.path.exists(IMAGE_UPLOAD_DIRECTORY):
+                # Create the directory, also create intermediate directories if necessary
+                os.makedirs(IMAGE_UPLOAD_DIRECTORY)
+
             file = request.files["image"]
             if not is_file_allowed(file.filename):
                 flash("That file is not valid")
@@ -71,10 +77,14 @@ def create():
             # when saving, we need absolute path
             img_abs_path = os.path.join(IMAGE_UPLOAD_DIRECTORY, filename)
 
+            if not os.path.exists(IMAGE_UPLOAD_DIRECTORY):
+                os.mkdir(IMAGE_UPLOAD_DIRECTORY)
+
             # when displaying in html, we need relative path
             img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
 
             file.save(img_abs_path)
+            print(img_rel_path)
             db.session.add(Post(user_id=user.id, username=user.username,
                                 content=post_text, date_time=datetime.now(), 
                                 image=img_rel_path, likes=[], like_count=0))
@@ -103,7 +113,7 @@ def edit(post_id):
 
     if request.method == "POST":
         post_text = request.form["posttext"]
-        post_has_image = "image" in request.files
+        post_has_image = "image" in request.files and request.files["image"].filename != ""
 
         if post_text == "":
             error = "You cannot post nothing!"
@@ -117,18 +127,30 @@ def edit(post_id):
 
         user: User = User.query.filter_by(username=session_username).first()
 
-        # the user does not exist... can happen
-        if not user:
-            flash("Something has gone wrong.")
-            return redirect(request.url)
+
+        error = None
 
         # check that the person trying to edit the post is the author
         if user.id != post.user_id:
             error = "You are not the author of this post!"
+        # the user does not exist... can happen
+        if not user:
+            error = "Something has gone wrong."
+            
+        if error:
+            flash(error)
+            return redirect(request.url)
+
 
         # upload the new image and delete the old one
         if post_has_image:
-            os.remove(os.path.join(REAL_PATH, post.image))
+            # Check if the directory already exists
+            if not os.path.exists(IMAGE_UPLOAD_DIRECTORY):
+                # Create the directory, also create intermediate directories if necessary
+                os.makedirs(IMAGE_UPLOAD_DIRECTORY)
+
+            if post.image:
+                os.remove(os.path.join(REAL_PATH, post.image))
             file = request.files["image"]
             if file.filename == "" or not is_file_allowed(file.filename):
                 flash("That file is not valid")
@@ -142,12 +164,8 @@ def edit(post_id):
             img_rel_path = os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, filename)
 
             file.save(img_abs_path)
-            db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now(), 
-                                image=img_rel_path))
-        else:
-            db.session.add(Post(user_id=user.id, username=user.username,
-                                content=post_text, date_time=datetime.now()))
+            post.image = img_rel_path
+        post.content = post_text
         db.session.commit()
         return redirect(url_for("feed.feed"))
     return render_template("createpost.html", text=post.content)

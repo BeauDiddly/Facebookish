@@ -15,7 +15,8 @@ body, html {
     display: flex;
     flex: 1;
     padding: 0 20px;
-    max-height: 10%;
+    max-height: 75px;
+    min-height: 75px;
     background-color: #67a3ba;
     color: white;
 }
@@ -25,12 +26,16 @@ body, html {
 }
 
 .nav_buttons {
-    display: block;
-    flex: 1;
+    display: flex;
+    flex: 4;
+    font-size: 1.7em;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .nav_buttons a {
     color: white;
+    text-decoration: none;
 }
 
 .nav_buttons a:hover {
@@ -53,7 +58,7 @@ body, html {
 .left {
     flex: 1;
     background-color: white;
-    padding: 0 20px;
+    padding: 20px 20px;
 }
 .right {
     display: flex;
@@ -72,9 +77,8 @@ body, html {
     flex-direction: column;
     align-items: left;
     text-align: center;
-    flex: 1;
+    flex: 0;
     background-color: rgb(227, 245, 255);
-    max-width: max(11%, 100px);
     color: red;
 }
 .temp {
@@ -100,6 +104,12 @@ body, html {
     max-height: 400px;
 }
 
+.create-post {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 /* friend request styles START */
 .sidebar-list {
     display: flex;
@@ -118,6 +128,11 @@ body, html {
     box-shadow: 1px 1px 2px black;
     border-radius: 5%;
     text-align: left;
+}
+
+.user-link {
+    color: black;
+    text-decoration: none;
 }
 
 /* button styles START */
@@ -154,3 +169,41 @@ body, html {
 /* button styles END */
 /* friend request styles END */
 /* main content styles END */
+
+/* Home/My account page styles START*/
+.top {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.username {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+.bio {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 500px;
+}
+
+.update-bio-form {
+    margin-top: 10px;
+}
+.hidden-update-bio-form {
+    display: none;
+}
+
+#edit-bio {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+/* Home/My account page styles END*/
+
+input {
+    margin-bottom: 5px;
+}

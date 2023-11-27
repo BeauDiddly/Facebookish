@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, jsonify, request, session, flash, redirect, url_for
+    Blueprint, jsonify, request, session, flash, redirect, url_for, render_template
 )
 
 from .models import User, FriendRequest
@@ -78,6 +78,22 @@ def get_friend_requests(user_id):
         'data': friend_requests_list
     }), 200
 
+@bp.route('/user_page/<int:user_id>')
+def view_user_page(user_id):
+
+    user = User.query.get(user_id)
+
+    if user:
+        username = user.username
+        bio = user.bio
+        posts = user.posts
+
+        posts.sort(key=lambda post: post.date_time)
+        posts.reverse()
+
+        # render user page, pass username, bio, posts
+        return render_template("user_page.html", username=username, bio=bio, feed=posts)
+
 @bp.route('/add', methods=['POST'])
 def add_friend():
     data: dict = request.get_json()
@@ -125,24 +141,45 @@ def send_request():
 
     target_username = request.form["friend"]
 
+    # If target_username is empy
     if not target_username:
         error = "You know what you did."
 
+    # If target user does not exist
     target: User = User.query.filter_by(username=target_username).first()
-    if not target:
+    if not target and target_username:
         error = "That user does not exist!"
 
+    # if user is not signed in
     sender_username = session.get("username")
     if not sender_username:
         error = "You are not signed in!" 
 
+    # If sender somehow does not exist
     sender: User = User.query.filter_by(username=sender_username).first()
     if not sender:
         error = "Something has gone awfully awry."
+
+    # Checks existing for incoming or outgoing request
+    if target:
+        existing_outgoing_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
+        existing_incoming_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
+        if existing_outgoing_request:
+            error = "Request is already sent! Waiting on response."
+        elif existing_incoming_request:
+            error = "This user has requested you! Check request list."
+    
+        friend_ids = [friend.id for friend in sender.friends]
+        if target.id in friend_ids:
+            error = "You are already friends with this user."
+
+        # Finally, if user attempts to add themselves
+        if sender.id == target.id:
+            error="Nice try. You cannot be friends with yourself."
 
     if error:
         flash(error)
     else:
         db.session.add(FriendRequest(from_user_id=sender.id, to_user_id=target.id))
         db.session.commit()
-    return redirect(url_for("feed.feed"))
+    return redirect(request.referrer or url_for('feed.feed'))

@@ -3,11 +3,19 @@
 {% block title %}Create Post{% endblock %}
 
 {% block content %}
-<form method="post" enctype="multipart/form-data">
-<label for="posttext">Put your thoughts here:</label><br>
-<textarea id="posttext" name="posttext" rows="4" cols="50">{{ text }}</textarea><br>
-<label for="image">Upload an image:</label><br>
-<input type="file" name="image">
-<input type="submit" value="Submit">
+<form method="post" enctype="multipart/form-data" class="create-post">
+    <div>
+        <label for="posttext">Put your thoughts here:</label><br>
+    </div>
+    <div>
+        <textarea id="posttext" name="posttext" rows="4" cols="50">{{ text }}</textarea><br>
+    </div>
+    <div>
+        <label for="image">Upload an image:</label><br>
+    </div>
+    <div>
+        <input type="file" name="image">
+        <input type="submit" value="Submit">
+    </div>
 </form>
 {% endblock %}

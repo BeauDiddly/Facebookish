@@ -9,12 +9,19 @@
         {% if post.image and post.image != "" %}
             <img src="{{ post.image }}">
         {% endif %}
-        <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}, likes: {{ post.like_count }}</p>
-        <p>
         {% if session['username'] == post.username %}
-            <a href="/post/edit/{{ post.id }}">Edit</a>
+            <p class="post_author">posted by you @ {{ post.date_time }}</p>
+            <p><a href="/post/edit/{{ post.id }}">Edit</a></p>
+        {% else %}
+            <p class="post_author">posted by {{ post.username }} @ {{ post.date_time }}</p>
         {% endif %}
+        <p>
+            Likes: {{ post.like_count }} <br>
+        {% if post.username_likes_post(session["username"]) %}
+            <a href="/post/like/{{ post.id }}">Unlike</a>
+        {% else %}
             <a href="/post/like/{{ post.id }}">Like</a>
+        {% endif %}
         </p>
     </div>
     {% endfor %}

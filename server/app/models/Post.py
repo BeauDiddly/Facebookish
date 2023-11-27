@@ -29,3 +29,6 @@ class Post(db.Model):
     like_count = db.Column(db.Integer)
     # shares = db.Column(db.Integer)
     # comments = db.relationship('Comment', backref='post')
+
+    def username_likes_post(self, username: str):
+        return username in [user.username for user in self.likes]
