@@ -162,7 +162,10 @@ def edit(post_id):
                 os.makedirs(IMAGE_UPLOAD_DIRECTORY)
 
             if post.image:
-                os.remove(os.path.join(IMAGE_UPLOAD_REL_DIRECTORY, post.image))
+                os.remove(os.path.join(
+                    IMAGE_UPLOAD_DIRECTORY, 
+                    f"{post.id}.{get_extension(post.image)}"
+                    ))
 
             file = request.files["image"]
             if file.filename == "" or not is_file_allowed(file.filename):
