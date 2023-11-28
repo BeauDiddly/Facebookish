@@ -107,7 +107,7 @@ def create():
 
         db.session.commit()
         return redirect(url_for("feed.feed"))
-    return render_template("createpost.html", text="")
+    return render_template("create_post.html", text="")
 
 
 @bp.route("/edit/<int:post_id>", methods=["POST", "GET"])
@@ -182,7 +182,7 @@ def edit(post_id):
         post.content = post_text
         db.session.commit()
         return redirect(url_for("feed.feed"))
-    return render_template("createpost.html", text=post.content)
+    return render_template("create_post.html", text=post.content)
 
 
 @bp.route("/like/<int:post_id>", methods=["GET"])
@@ -245,8 +245,38 @@ def comment(post_id):
         post.comments.append(comment)
         post.comment_count += 1
         db.session.commit()
+
         return redirect(f"/post/{post.id}")
-    return render_template("createcomment.html")
+    
+    return render_template("create_comment.html", content="")
+
+@bp.route("/comment/edit/<int:comment_id>", methods=["GET", "POST"])
+def edit_comment(comment_id):
+    comment: Comment = Comment.query.get(comment_id)
+
+    if not comment:
+        flash("That comment does not exist!")
+        return redirect(url_for("feed.feed"))
+    
+    if request.method == "POST":
+        comment_text = request.form["comtext"]
+
+        if comment_text == "":
+            flash("You cannot post nothing!")
+            return redirect(request.url)
+        
+        user = get_session_user(session)
+
+        if not user:
+            flash("Who are you?")
+            # to go against the word of my father?
+            return redirect(request.url)
+        
+        comment.content = comment_text
+        db.session.commit()
+        return redirect(f"/post/{comment.post_id}")
+    
+    return render_template("create_comment.html", content=comment.content)
 
 @bp.route("/share/<int:post_id>", methods=["GET", "POST"])
 def share(post_id):
