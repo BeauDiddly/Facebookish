@@ -9,6 +9,14 @@
             <span class="username">
                 {{ session.get("username") }}'s Page
             </span>
+
+            <img src="{{ url_for('static', filename=profile_image_url) }}" alt="User Image" width="200" height="200">
+
+            <form action="/my_page/{{ session.get('username') }}/update_image" method="post" enctype="multipart/form-data">
+                <input type="file" name="image">
+                <input type="submit" value="Upload New Image">
+            </form>
+
             <span class="bio">
                 {{ bio }}
                 <span id="edit-bio">Change Bio</span>
