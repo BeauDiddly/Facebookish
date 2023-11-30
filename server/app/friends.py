@@ -145,20 +145,24 @@ def send_request():
     if not target_username:
         error = "You know what you did."
 
+
     # If target user does not exist
     target: User = User.query.filter_by(username=target_username).first()
     if not target and target_username:
         error = "That user does not exist!"
+
 
     # if user is not signed in
     sender_username = session.get("username")
     if not sender_username:
         error = "You are not signed in!" 
 
+
     # If sender somehow does not exist
     sender: User = User.query.filter_by(username=sender_username).first()
     if not sender:
         error = "Something has gone awfully awry."
+
 
     # Checks existing for incoming or outgoing request
     if target:
@@ -166,16 +170,20 @@ def send_request():
         existing_incoming_request = FriendRequest.query.filter_by(from_user_id=sender.id, to_user_id=target.id).first()
         if existing_outgoing_request:
             error = "Request is already sent! Waiting on response."
+
         elif existing_incoming_request:
             error = "This user has requested you! Check request list."
+
     
         friend_ids = [friend.id for friend in sender.friends]
         if target.id in friend_ids:
             error = "You are already friends with this user."
 
+
         # Finally, if user attempts to add themselves
         if sender.id == target.id:
             error="Nice try. You cannot be friends with yourself."
+        
 
     if error:
         flash(error)
