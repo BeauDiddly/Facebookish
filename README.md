@@ -15,7 +15,7 @@ This product will be a stand-alone, self-contained social media platform that ai
 
 ## Requirements to Run:
 - Python 3.11
-- Python packages: flask, flask-sqlalchemy
+- Python packages: flask, flask-sqlalchemy, pytest
 
 ## How to Run:
 Run "/server/run.py" with Python 3.11. I.e. "python /server/run.py" when in the project root directory.

@@ -49,6 +49,9 @@
                 <div class="post">
                     <p class="post_content">{{ comment.content }}</p>
                     <p class="post_author">posted by {{ comment.username }} @ {{ comment.date_time }}</p>
+                    {% if comment.username == session["username"] %}
+                        <a href="/post/comment/edit/{{ comment.id }}">Edit</a>
+                    {% endif %}
                 </div>
             {% endfor %}
         {% endif %}
