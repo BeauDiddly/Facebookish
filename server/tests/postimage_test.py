@@ -1,17 +1,9 @@
 from pathlib import Path
 resources = Path(__file__).parent / "resources"
 
-def test_post(client):
-    client.post("/auth/login", data={
-        "username": "Beaudemann",
-        "password": "ach",
-    })
-    response = client.post("/post/create", data={
-        "posttext": "Your mother is a nice lady",
-    })
-    assert response.status_code == 302
 
-def test_post2(client):
+
+def test_postimage(client):
     client.post("/auth/login", data={
         "username": "Beaudemann",
         "password": "ach",
