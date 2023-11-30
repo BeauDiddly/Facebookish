@@ -1,4 +1,5 @@
 from app import db
+from app.models import User
 
 def test_login(client):
     response = client.post("/auth/login", data={
@@ -7,16 +8,13 @@ def test_login(client):
     })
     assert response.status_code == 302
 
-def test_register1(client):
-    response = client.post("/auth/register", data={
-        "username": "hungryboi",
+
+def test_register(client):
+    client.post("/auth/register", data={
+        "username": "Beaudemann2",
         "password": "ach",
         "confirm_password": "ach",
     })
-    db.session.delete()
-    assert response.status_code == 302
-
-def test_register2(client):
     response = client.post("/auth/register", data={
         "username": "Beaudemann",
         "password": "ach",
